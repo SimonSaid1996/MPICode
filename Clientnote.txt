@@ -1,0 +1,36 @@
+CLient tect **************************
+useful related methods sites:
+https://mpi4py.readthedocs.io/en/stable/tutorial.html
+https://java.hotexamples.com/examples/mpi/MPI.COMM_WORLD/Send/java-mpi.comm_world-send-method-examples.html
+
+ff
+dfgdfg
+df
+gds
+fg
+sdfg
+sdf
+g
+sdfgsd
+
+(a) SET MPJ_HOME=C:\Users\Admin\Desktop\concordia_courses\firstSummer\Comp6231\assign3\assign3-vlab9\T09\mpj-v0_44
+(b)javac -cp %MPJ_HOME%\lib\mpj.jar *.java
+(c) C:\Users\Admin\Desktop\concordia_courses\firstSummer\Comp6231\assign3\assign3-vlab9\T09\mpj-v0_44\bin\mpjrun.bat -np 2 MPJAndRMIDemo
+
+
+//to read video files
+https://stackoverflow.com/questions/16095838/reading-video-data-and-writing-to-another-file-java
+
+
+
+arg segment 0
+arg segment 2
+arg segment smpdev
+arg segment testing   //starting from the third arg
+
+
+InputStream fin = new FileInputStream(new File(sourceFilePath));  //create a stream object and send to the client later
+
+
+api should be a separete class as problem, api is only at the master node
+CLient tect **************************
