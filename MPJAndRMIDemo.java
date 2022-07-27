@@ -32,8 +32,6 @@ public class MPJAndRMIDemo {
     static final int PORT = 6231;
     static final int MASTER = 0;
     static final int DEST = 1;
-
-    //for now, just try one client situation
     static final int NCLIENTS_TEST = 1;    //NCLIENTS_TEST = 5;
     static final int BUF_LENGTH_TEST = 100;
     static int fileSize;
@@ -56,17 +54,7 @@ public class MPJAndRMIDemo {
         MPI.Finalize();
     }
 
-    public static class RemoteOutputStream extends OutputStream implements Remote{
-        private OutputStream OS;
 
-        public RemoteOutputStream(OutputStream output){
-            OS = output;
-        }
-        @Override
-        public void write(int b) throws IOException {
-            OS.write(b);
-        }
-    }
 
 
 

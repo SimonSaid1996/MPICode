@@ -29,7 +29,16 @@ public class RemoteInputStream extends UnicastRemoteObject  implements IRemoteIn
 
     @Override
     public int read(byte[] b, int off, int len) throws  IOException {
+
         return input.read(b, off, len);
+    }
+
+    @Override
+    public byte[] readb(byte[] b, int off, int len) throws  IOException {
+        if(input.read(b, off, len)==-1){
+            return null;
+        }
+        return b;
     }
 
     @Override

@@ -1,31 +1,18 @@
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.rmi.Naming;
+import java.util.ArrayList;
+import java.util.Scanner;
+
 class RMIClient {
 
-    public static void upload(){
+    public static void upload(String sourceFilePath){
         try {
-            System.out.println("upload");
-            String sourceFilePath = "Clientnote.txt";
+            System.out.println("upload: "+sourceFilePath);
             InputStream fin1 = new FileInputStream(new File(sourceFilePath));
             RemoteInputStream fin =  new RemoteInputStream(fin1);
-            byte[] buffer = new byte[4096];   //might be changed later, not even sure if i should send byte or just char
-            int bufSize = 0;
-            try{
-//                bufSize = fin.read(buffer,0,buffer.length);
-//                for(int j =0;j<buffer.length;j++){
-//                    System.out.print((char)buffer[j]);
-//                }
-            }catch (Exception e){
-                System.out.println("read exception "+e);
-                System.out.println("happened in line 102");
-            }
             System.out.println("OK looking up");
             APIInterface remoteapi = (APIInterface) Naming.lookup(RMIServer.getURI(6231, "SampleAPI"));
-//            int res = remoteapi.upload(buffer);
-            remoteapi.upload(fin);
+            remoteapi.upload(fin,sourceFilePath);
 
 
         }
@@ -35,29 +22,105 @@ class RMIClient {
         }
     }
 
-    public static String[] list(){
-        String[] errorSoon = {"Hello", "World"};
+    public static void list(){
         try{
             APIInterface remoteapi = (APIInterface) Naming.lookup(RMIServer.getURI(6231, "SampleAPI"));
-            return remoteapi.listFiles();
+            System.out.println("The list of files in Repo:");
+            for (String s : remoteapi.listFiles()) {
+                System.out.println(s);
+            }
         }
         catch(Exception e){
             System.out.println("ERR " + e.getMessage());
             e.printStackTrace();
         }
-        return errorSoon;
     }
-    public static void download(OutputStream OS){
+    public static void download(String sourceFilePath,String desFilePath){
+        try {
+            System.out.println("download: "+sourceFilePath);
+            RemoteOuputStream os=new RemoteOuputStream(new FileOutputStream(desFilePath));
+            APIInterface remoteapi = (APIInterface) Naming.lookup(RMIServer.getURI(6231, "SampleAPI"));
+            remoteapi.download(sourceFilePath,os);
+        }catch(Exception e){
+            System.out.println("ERR " + e.getMessage());
+            e.printStackTrace();
+        }
 
+    }
+    public static void remove(String sourceFilePath){
+        try {
+            System.out.println("remove: "+sourceFilePath);
+            APIInterface remoteapi = (APIInterface) Naming.lookup(RMIServer.getURI(6231, "SampleAPI"));
+            remoteapi.remove(sourceFilePath);
+        }catch(Exception e){
+            System.out.println("ERR " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
 
     public static void main(String[] args) {
         try {
-            upload();
-//            for (String s : list()) {
-//                System.out.println(s);
-//            }
+            Scanner myObj = new Scanner(System.in);
+            while (true) {
+                String s = myObj.nextLine();
+                String[] command = s.split(" ");
+                if (command[0].equals("end")) {
+                    break;
+                }
+
+                switch (command[0].toUpperCase()) {
+                    case "UPDATE":
+                        if(command.length==2){
+                            upload(command[1]);
+                        }
+                        else{
+                            System.out.println("Error");
+                        }
+                        break;
+                    case "DOWNLOAD":
+                        if(command.length==3){
+                            download(command[1],command[2]);
+                        }
+                        else{
+                            System.out.println("Error");
+                        }
+                        break;
+                    case "REMOVE":    //kind of fixed
+                        if(command.length==2){
+                            remove(command[1]);
+                        }
+                        else{
+                            System.out.println("Error");
+                        }
+                        break;
+
+                    case "TEST":    //kind of fixed
+                        if(command.length==1){
+                            upload("Clientnote.txt");
+                            upload("notes.txt");
+                            remove("Clientnote.txt");
+                            download("notes.txt","test.txt");
+                            list();
+                        }
+                        else{
+                            System.out.println("Error");
+                        }
+                        break;
+
+                    case "LIST":
+                        if(command.length==1){
+                            list();
+                            break;
+                        }
+
+                    default:
+                        System.out.println("Error");
+                }
+            }
+
+
+
         }
         catch(Exception e){
             System.out.println("ERR " + e.getMessage());

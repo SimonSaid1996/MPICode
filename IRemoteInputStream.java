@@ -10,4 +10,6 @@ public interface IRemoteInputStream extends Remote,AutoCloseable {
     int available() throws IOException;
     byte[] readb(byte[] b) throws IOException;
 
+    byte[] readb(byte[] b, int off, int len) throws  IOException;
+
 }
